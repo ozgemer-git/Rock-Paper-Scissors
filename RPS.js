@@ -27,13 +27,13 @@ RESET.onclick = () => {
 }
 
 function startGame(e){
-    let picks = [];
+    const picks = [];
     picks.push(e.target.id);
     picks.push(housePick());
     showPicks(picks);
-    const gameState = gameResult(picks);
     RESET.style.display = 'inherit';
-    console.log(`player picked: ${picks[0]}\nhouse picked: ${picks[1]}\n${gameState}`);
+    console.log(`player picked: ${picks[0]}\nhouse picked: ${picks[1]}\n${gameResult(picks)}`);
+    updateScore();
 }
 
 function showPicks(picks){
@@ -50,6 +50,10 @@ function showPicks(picks){
 function housePick(){
     const iconArray = ['rock', 'paper', 'scissors'];
     return iconArray[Math.floor(Math.random() * 3)];
+}
+
+function updateScore(){
+    document.getElementById('score').textContent = gamesWon;
 }
 
 function gameResult(picks){
@@ -71,9 +75,13 @@ function gameResult(picks){
                     won = true;
                 break;
         }
-        if(won)
+        if(won){
+            gamesWon++;
             return 'Player wins!';
-        else
+        }
+        else{
+            gamesWon--;
             return 'House wins!';
+        }
     }
 }
