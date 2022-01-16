@@ -1,7 +1,9 @@
 const GAME = document.getElementById('icons');
 const RESET = document.getElementById('reset');
 let CLONE = undefined;
-let gamesWon = 0;
+let currentWins = 0;
+let playerPicked = undefined;
+let hosePicked = undefined;
 const ICONS = {
     rock : document.getElementById('rock'),
     paper : document.getElementById('paper'),
@@ -17,12 +19,15 @@ GAME.addEventListener('click', (e) => {
 RESET.onclick = () => {
     for (const [key, value] of Object.entries(ICONS)) {
         value.style.display = 'inline-block';
+        value.style.order = 0;
     }
     if(CLONE != undefined){
         CLONE.remove();
         CLONE = undefined;
     }
     RESET.style.display = 'none';
+    housePicked.remove();
+    playerPicked.remove();
     console.log('reset');
 }
 
@@ -45,6 +50,8 @@ function showPicks(picks){
         CLONE = document.getElementById(picks[0]).cloneNode(true);
         document.getElementById('icons').appendChild(CLONE);
     }
+    ICONS[picks[0]].style.order = -1;
+    addPicksText(picks);
 }
 
 function housePick(){
@@ -52,8 +59,25 @@ function housePick(){
     return iconArray[Math.floor(Math.random() * 3)];
 }
 
+function addPicksText(picks){
+    playerPicked = document.createElement("p");
+    playerPicked.textContent = 'YOU PICKED:';
+    playerPicked.style.marginTop = '-50px';
+    playerPicked.style.color = 'white';
+    housePicked = document.createElement("p");
+    housePicked.textContent = 'HOUSE PICKED:';
+    housePicked.style.marginTop = '-50px';
+    housePicked.style.color = 'white';
+    housePicked.style.float = 'right';
+    ICONS[picks[0]].appendChild(playerPicked);
+    if(CLONE != undefined)
+        CLONE.appendChild(housePicked);
+    else
+        ICONS[picks[1]].appendChild(housePicked);
+}
+
 function updateScore(){
-    document.getElementById('score').textContent = gamesWon;
+    document.getElementById('score').textContent = currentWins;
 }
 
 function gameResult(picks){
@@ -76,11 +100,11 @@ function gameResult(picks){
                 break;
         }
         if(won){
-            gamesWon++;
+            currentWins++;
             return 'Player wins!';
         }
         else{
-            gamesWon--;
+            currentWins--;
             return 'House wins!';
         }
     }
