@@ -3,7 +3,7 @@ const RESET = document.getElementById('reset');
 let CLONE = undefined;
 let currentWins = 0;
 let playerPicked = undefined;
-let hosePicked = undefined;
+let housePicked = undefined;
 const ICONS = {
     rock : document.getElementById('rock'),
     paper : document.getElementById('paper'),
