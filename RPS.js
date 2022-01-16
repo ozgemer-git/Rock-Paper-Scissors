@@ -4,6 +4,7 @@ let CLONE = undefined;
 let currentWins = 0;
 let playerPicked = undefined;
 let housePicked = undefined;
+let gameEnded = false;
 const ICONS = {
     rock : document.getElementById('rock'),
     paper : document.getElementById('paper'),
@@ -12,7 +13,8 @@ const ICONS = {
 
 GAME.addEventListener('click', (e) => {
     if(e.target.tagName == "SPAN"){
-        startGame(e);
+        if(!gameEnded)
+            startGame(e);
     }
 });
 
@@ -29,16 +31,18 @@ RESET.onclick = () => {
     housePicked.remove();
     playerPicked.remove();
     console.log('reset');
+    gameEnded = false;
 }
 
 function startGame(e){
     const picks = [];
     picks.push(e.target.id);
-    picks.push(housePick());
+    picks.push(randomHousePick());
     showPicks(picks);
     RESET.style.display = 'inherit';
     console.log(`player picked: ${picks[0]}\nhouse picked: ${picks[1]}\n${gameResult(picks)}`);
     updateScore();
+    gameEnded = true;
 }
 
 function showPicks(picks){
@@ -54,7 +58,7 @@ function showPicks(picks){
     addPicksText(picks);
 }
 
-function housePick(){
+function randomHousePick(){
     const iconArray = ['rock', 'paper', 'scissors'];
     return iconArray[Math.floor(Math.random() * 3)];
 }
